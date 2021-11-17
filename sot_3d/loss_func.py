@@ -1,5 +1,5 @@
 import numpy as np
-import sot_3d, sot_3d.factors as factors, sot_3d.utils as utils
+from . import factors, utils, FrameData, OptimData
 import matplotlib.pyplot as plt
 
 
@@ -32,7 +32,7 @@ class LossFunc:
         self.detection_weight = configs['weight']['detection']
         self.motion_consistency_weight = configs['weight']['motion_consistency']
 
-    def pre_frame_optim(self, input_data: sot_3d.FrameData):
+    def pre_frame_optim(self, input_data: FrameData):
         self.size = min(self.size + 1, self.window_size)
         for i in range(self.window_size - 1):
             if self.switches['latitude']:
@@ -40,7 +40,7 @@ class LossFunc:
             if self.switches['detection']:
                 self.detections[i].pre_frame_optim(input_data)
     
-    def pre_optim_step(self, optim_data: sot_3d.OptimData):
+    def pre_optim_step(self, optim_data: OptimData):
         for i in range(self.size - 1):
             if self.switches['icp_loss']:
                 self.icp_factors[i].pre_optim_step(optim_data, (i, i + 1))
@@ -142,7 +142,7 @@ class LossFunc:
                 icp_der[4 * i: 4 * (i + 1)] += \
                     self.icp_factors[i].jac(params[4 * i: 4 * (i + 1)])
             icp_der /= (self.size - 1)
-            result += icp_der
+            result += icp_der * self.icp_weight
 
         # motion prior
         motion_prior_der = self.motion_prior.jac(params[:])

@@ -140,6 +140,7 @@ python evaluation.py \
     --data_folder DATA_ROOT \                     # root directory storing the dataset
     --bench_list_folder benchmark_list_folder \   # directory for benchmark tracklet information, by default the ./benchmark/
     --iou                                         # use this if already computes the iou during inference
+    --process process_number                      # use multiprocessing to accelerate the evaluation, especially in cases of computing iou
 ```
 
 For the evaluation of shapes, use the following code:
@@ -183,10 +184,10 @@ matplotlib, open3d, pangolin
 If you find our paper or repository useful, please consider citing
 
 ```tex
-@article{pang2021model,
+@article{pang_lidarsot,
     title={Model-free Vehicle Tracking and State Estimation in Point Cloud Sequences},
     author={Pang, Ziqi and Li, Zhichao and Wang, Naiyan},
-    journal={arXiv preprint arXiv:2103.06028},
+    journal={IROS},
     year={2021}
 }
 ```
